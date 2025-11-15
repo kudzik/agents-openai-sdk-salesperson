@@ -25,4 +25,4 @@ Powstaje fundament systemu wieloagentowego, w którym agenci mogą:
 - korzystać z narzędzi świata rzeczywistego (np. SendGrid),
 - współpracować ze sobą w ramach orkiestracji i przekazywania zadań.
 
----
+Popraw pliki  @main.py  aby był zgodny z @Notatki.md  dodaj komentarze i zrefaktoryzuj kod. napisz wymagane testy i sprawdź działanie, następnie na podstawie @main.py  i @Notatki.md Stwórz plik KURS.MD z profesjonalnym kursem krok po kroku zawierającym wyjaśnienia wraz z przykładami zamieszczonego kodu. Kurs ma być po polsku, uzupełnij brakujące koncepcje, sprawdź czy nie ma błędów składniowych i logicznych. Jeśli uznasz za konieczne uzupełnij brakujące koncepcje i wytłumacz je w przystępny sposób.Kurs kierowany dla początkujących w formie artykułu na bloga. pomiń informacje o dniach ma być ciągły i spójny dokumentacja @openai-agents-python.   Jeśli masz pytania to je zadaj.
