@@ -26,5 +26,3 @@ Powstaje fundament systemu wieloagentowego, w którym agenci mogą:
 - współpracować ze sobą w ramach orkiestracji i przekazywania zadań.
 
 ---
-
-Chcesz, żebym przygotował też **wersję skróconą w formie pitcha** (np. 2–3 zdania), którą można użyć jako opis projektu w portfolio lub na LinkedIn?
