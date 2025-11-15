@@ -130,6 +130,7 @@ agent = Agent(
 ```
 
 **Parametry:**
+
 - `name`: Nazwa agenta (używana w śledzeniu)
 - `instructions`: Monit systemowy określający zachowanie agenta
 - `model`: Model LLM do użycia (np. "gpt-4o-mini", "gpt-4o")
@@ -249,6 +250,7 @@ async for event in result.stream_events():
 ```
 
 **Różnica między `run` a `run_streamed`:**
+
 - `run`: Czeka na całą odpowiedź, zwraca wynik po zakończeniu
 - `run_streamed`: Wyświetla odpowiedź na bieżąco, fragment po fragmencie (idealne dla UI)
 
@@ -325,6 +327,7 @@ for i, email in enumerate(emails, 1):
 ```
 
 **Korzyści:**
+
 - **Oszczędność czasu**: Zamiast 3 × czas_pojedynczego_wywołania, otrzymujemy maksymalny czas z trzech wywołań
 - **Lepsze wykorzystanie zasobów**: Gdy jeden agent czeka na odpowiedź API, pętla zdarzeń przełącza się na innego
 
@@ -431,6 +434,7 @@ def send_email(body: str) -> dict:
 ```
 
 **Co framework robi automatycznie:**
+
 1. **Generuje nazwę narzędzia** z nazwy funkcji (`send_email`)
 2. **Tworzy opis** z docstringa (komentarz w potrójnych cudzysłowach)
 3. **Generuje JSON Schema** z type hints (`body: str` → parametr typu string)
@@ -458,6 +462,7 @@ def send_email(body: str) -> dict:
 ```
 
 **Kluczowe elementy:**
+
 - `@function_tool`: Dekorator konwertujący funkcję na narzędzie
 - `body: str`: Type hint określający typ parametru
 - Docstring: Opis funkcji używany jako opis narzędzia dla LLM
@@ -502,6 +507,7 @@ with trace("Kierownik sprzedaży"):
 ```
 
 **Co się dzieje:**
+
 1. Agent otrzymuje wiadomość
 2. Agent decyduje, że potrzebuje wygenerować e-mail
 3. Agent wywołuje narzędzie `send_email` z wygenerowaną treścią
@@ -545,6 +551,7 @@ tool1 = sales_agent1.as_tool(
 ```
 
 **Co się dzieje:**
+
 1. Metoda `as_tool()` tworzy narzędzie z agenta
 2. Gdy narzędzie jest wywoływane, framework faktycznie uruchamia agenta z jego instrukcjami
 3. Wynik działania agenta jest zwracany jako wynik narzędzia
@@ -616,6 +623,7 @@ with trace("Kierownik sprzedaży"):
 ```
 
 **Przepływ działania:**
+
 1. Agent kierownik otrzymuje wiadomość
 2. Agent kierownik wywołuje `sales_agent1` (narzędzie) → otrzymuje e-mail 1
 3. Agent kierownik wywołuje `sales_agent2` (narzędzie) → otrzymuje e-mail 2
@@ -768,6 +776,7 @@ with trace("Zautomatyzowany SDR"):
 ```
 
 **Przepływ działania z handoff:**
+
 1. Agent kierownik generuje 3 e-maile (używając Tools) → kontrola wraca
 2. Agent kierownik wybiera najlepszy
 3. Agent kierownik **przekazuje kontrolę** (Handoff) agentowi Menedżer E-maili
@@ -775,6 +784,7 @@ with trace("Zautomatyzowany SDR"):
 5. Menedżer E-maili używa swoich narzędzi: Temat → Konwersja HTML → Wysyłka
 
 **Różnica w śledzeniu (trace):**
+
 - **Narzędzia**: Na początku śladu kierownik wywołuje agentów sprzedaży, kontrola wraca
 - **Przekazanie**: Pod koniec śladu kierownik przekazuje kontrolę, cała późniejsza aktywność jest realizowana przez Menedżera E-maili
 
@@ -847,11 +857,13 @@ with trace("Nazwa operacji"):
 ```
 
 **Jak sprawdzić ślady:**
+
 1. Odwiedź [https://platform.openai.com/traces](https://platform.openai.com/traces)
 2. Zaloguj się na swoje konto OpenAI
 3. Zobacz szczegółowe ślady wszystkich operacji agentów
 
 **Co możesz zobaczyć:**
+
 - Które narzędzia zostały wywołane
 - Jakie były odpowiedzi agentów
 - Przepływ kontroli między agentami
@@ -862,6 +874,7 @@ with trace("Nazwa operacji"):
 #### Problem: Agent nie wywołuje narzędzia
 
 **Rozwiązanie:**
+
 - Sprawdź, czy narzędzie jest dodane do listy `tools`
 - Upewnij się, że opis narzędzia (docstring) jest jasny
 - Sprawdź instrukcje agenta - czy są wystarczająco precyzyjne?
@@ -869,6 +882,7 @@ with trace("Nazwa operacji"):
 #### Problem: Błędy SSL przy wysyłce e-maili
 
 **Rozwiązanie:**
+
 ```bash
 pip install --upgrade certifi
 ```
@@ -882,6 +896,7 @@ os.environ['SSL_CERT_FILE'] = certifi.where()
 #### Problem: E-maile nie docierają
 
 **Sprawdź:**
+
 1. Folder spam w skrzynce odbiorczej
 2. Status odpowiedzi SendGrid (powinien być 202)
 3. Weryfikację nadawcy w SendGrid
@@ -954,12 +969,14 @@ coordinator = Agent(
 ### 1. Pisanie dobrych instrukcji
 
 **Dobre instrukcje:**
+
 - ✅ Są konkretne i precyzyjne
 - ✅ Zawierają przykłady, gdy to możliwe
 - ✅ Określają jasne kroki do wykonania
 - ✅ Zawierają kluczowe zasady i ograniczenia
 
 **Złe instrukcje:**
+
 - ❌ Są zbyt ogólne ("Bądź pomocny")
 - ❌ Są niejasne ("Zrób to dobrze")
 - ❌ Brakuje kontekstu
@@ -967,12 +984,14 @@ coordinator = Agent(
 ### 2. Projektowanie narzędzi
 
 **Dobre narzędzie:**
+
 - ✅ Ma jasny, opisowy docstring
 - ✅ Używa type hints dla parametrów
 - ✅ Zwraca strukturyzowane dane (dict, list)
 - ✅ Obsługuje błędy gracefully
 
 **Przykład:**
+
 ```python
 @function_tool
 def get_weather(city: str) -> dict:
@@ -992,6 +1011,7 @@ def get_weather(city: str) -> dict:
 ### 3. Zarządzanie kosztami
 
 **Optymalizacja kosztów:**
+
 - Używaj `gpt-4o-mini` dla prostych zadań
 - Używaj `gpt-4o` tylko dla złożonych zadań wymagających głębszego rozumowania
 - Ograniczaj długość instrukcji (ale nie kosztem jakości)
@@ -1106,6 +1126,7 @@ report_generator = Agent(
 | Statyczny, przewidywalny | Dynamiczny, adaptacyjny |
 
 **Przejście następuje, gdy:**
+
 - Dodajemy narzędzia do agenta
 - Dajemy agentowi instrukcje, aby sam decydował o użyciu narzędzi
 - Agent otrzymuje autonomię decyzyjną
@@ -1143,7 +1164,8 @@ report_generator = Agent(
 
 ### P: Jak ograniczyć koszty?
 
-**O:** 
+**O:**
+
 - Używaj `gpt-4o-mini` dla prostych zadań
 - Ograniczaj długość instrukcji
 - Używaj równoległych wywołań, aby skrócić czas
@@ -1158,4 +1180,3 @@ report_generator = Agent(
 **Gratulacje!** Ukończyłeś kompleksowy kurs budowy systemu wieloagentowego z OpenAI Agents SDK. Masz teraz wiedzę i narzędzia, aby tworzyć zaawansowane aplikacje wykorzystujące AI.
 
 Powodzenia w budowaniu własnych systemów agentowych! 🚀
-
