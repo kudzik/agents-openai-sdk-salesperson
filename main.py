@@ -29,8 +29,10 @@ load_dotenv(override=True)
 
 # Pobieranie konfiguracji z zmiennych środowiskowych
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
-FROM_EMAIL = os.environ.get("FROM_EMAIL", "ed@edwarddonner.com")  # Zmień na swój zweryfikowany adres
-TO_EMAIL = os.environ.get("TO_EMAIL", "ed.donner@gmail.com")  # Zmień na adres odbiorcy
+FROM_EMAIL = os.environ.get(
+    "FROM_EMAIL", "example@example.com"
+)  # Zmień na swój zweryfikowany adres
+TO_EMAIL = os.environ.get("TO_EMAIL", "example@example.com")  # Zmień na adres odbiorcy
 
 # Weryfikacja wymaganych zmiennych środowiskowych
 if not SENDGRID_API_KEY:
@@ -46,12 +48,12 @@ if not SENDGRID_API_KEY:
 def send_test_email() -> None:
     """
     Funkcja testowa do weryfikacji konfiguracji SendGrid.
-    
+
     Wysyła prostą wiadomość testową, aby upewnić się, że:
     - Klucz API jest poprawny
     - Adres nadawcy jest zweryfikowany w SendGrid
     - Konfiguracja działa poprawnie
-    
+
     Oczekiwany status odpowiedzi: 202 (Accepted)
     """
     sg = sendgrid.SendGridAPIClient(api_key=SENDGRID_API_KEY)
@@ -96,7 +98,7 @@ INSTRUCTIONS_CONCISE = (
 def create_sales_agents() -> tuple[Agent, Agent, Agent]:
     """
     Tworzy trzy agentów sprzedaży z różnymi stylami komunikacji.
-    
+
     Returns:
         tuple: Trzech agentów (profesjonalny, angażujący, zwięzły)
     """
@@ -129,10 +131,10 @@ def create_sales_agents() -> tuple[Agent, Agent, Agent]:
 async def demonstrate_streaming(agent: Agent, message: str) -> None:
     """
     Demonstruje strumieniowe generowanie odpowiedzi przez agenta.
-    
+
     Zamiast czekać na całą odpowiedź, wyświetlamy ją fragment po fragmencie,
     co jest szczególnie przydatne w aplikacjach UI/UX.
-    
+
     Args:
         agent: Agent do uruchomienia
         message: Wiadomość wejściowa dla agenta
@@ -157,18 +159,18 @@ async def generate_parallel_emails(
 ) -> list[str]:
     """
     Generuje trzy różne e-maile sprzedażowe równolegle używając asyncio.gather.
-    
+
     Korzyści:
     - Oszczędność czasu - trzy wywołania API działają jednocześnie
     - Lepsze wykorzystanie zasobów - gdy jeden agent czeka na odpowiedź API,
       pętla zdarzeń przełącza się na innego agenta
-    
+
     Args:
         agent1: Pierwszy agent (profesjonalny)
         agent2: Drugi agent (angażujący)
         agent3: Trzeci agent (zwięzły)
         message: Wiadomość wejściowa
-    
+
     Returns:
         Lista trzech wygenerowanych e-maili
     """
@@ -188,18 +190,18 @@ async def select_best_email(
 ) -> str:
     """
     Generuje trzy warianty e-maili, a następnie wybiera najlepszy.
-    
+
     Proces:
     1. Trzy agenty generują równolegle różne warianty e-maili
     2. Agent wybierający (picker) ocenia wszystkie warianty i wybiera najlepszy
-    
+
     Args:
         agent1: Pierwszy agent sprzedaży
         agent2: Drugi agent sprzedaży
         agent3: Trzeci agent sprzedaży
         picker_agent: Agent odpowiedzialny za wybór najlepszego e-maila
         message: Wiadomość wejściowa
-    
+
     Returns:
         Najlepszy wybrany e-mail
     """
@@ -230,16 +232,16 @@ async def select_best_email(
 def send_email(body: str) -> Dict[str, str]:
     """
     Wysyła e-mail z podaną treścią do wszystkich potencjalnych klientów.
-    
+
     Ta funkcja jest automatycznie konwertowana na narzędzie (tool) przez
     dekorator @function_tool. Framework OpenAI Agents SDK automatycznie:
     - Generuje nazwę narzędzia z nazwy funkcji
     - Tworzy opis z docstringa
     - Generuje JSON Schema z type hints
-    
+
     Args:
         body: Treść wiadomości e-mail do wysłania
-    
+
     Returns:
         Słownik ze statusem operacji
     """
@@ -256,11 +258,11 @@ def send_email(body: str) -> Dict[str, str]:
 def send_html_email(subject: str, html_body: str) -> Dict[str, str]:
     """
     Wysyła e-mail z podanym tematem i treścią HTML do wszystkich potencjalnych klientów.
-    
+
     Args:
         subject: Temat wiadomości e-mail
         html_body: Treść wiadomości w formacie HTML
-    
+
     Returns:
         Słownik ze statusem operacji
     """
@@ -278,20 +280,18 @@ def send_html_email(subject: str, html_body: str) -> Dict[str, str]:
 # ============================================================================
 
 
-def create_sales_agent_tools(
-    agent1: Agent, agent2: Agent, agent3: Agent
-) -> list:
+def create_sales_agent_tools(agent1: Agent, agent2: Agent, agent3: Agent) -> list:
     """
     Konwertuje agentów sprzedaży na narzędzia, które mogą być używane przez innych agentów.
-    
+
     Koncepcja "Agent jako Narzędzie" pozwala agentowi planującemu (Manager)
     na dynamiczne wywoływanie innych agentów wykonawczych.
-    
+
     Args:
         agent1: Pierwszy agent sprzedaży
         agent2: Drugi agent sprzedaży
         agent3: Trzeci agent sprzedaży
-    
+
     Returns:
         Lista narzędzi utworzonych z agentów
     """
@@ -312,15 +312,15 @@ def create_sales_agent_tools(
 def create_sales_manager_with_tools(sales_tools: list) -> Agent:
     """
     Tworzy agenta kierownika sprzedaży, który używa narzędzi do generowania i wysyłania e-maili.
-    
+
     Instrukcje kierownika prowadzą go przez proces:
     1. Generowanie trzech wariantów e-maili używając narzędzi agentów
     2. Wybór najlepszego e-maila
     3. Wysłanie najlepszego e-maila używając narzędzia send_email
-    
+
     Args:
         sales_tools: Lista narzędzi (agenty sprzedaży + send_email)
-    
+
     Returns:
         Agent kierownika sprzedaży
     """
@@ -355,7 +355,7 @@ def create_sales_manager_with_tools(sales_tools: list) -> Agent:
 def create_email_formatting_agents() -> tuple[Agent, Agent]:
     """
     Tworzy agentów odpowiedzialnych za formatowanie e-maili.
-    
+
     Returns:
         Tuple zawierający:
         - Agent do pisania tematów e-maili
@@ -390,10 +390,10 @@ def create_email_formatting_agents() -> tuple[Agent, Agent]:
 def create_email_manager_agent() -> Agent:
     """
     Tworzy agenta zarządzającego formatowaniem i wysyłką e-maili.
-    
+
     Ten agent będzie używany jako "handoff" - agent kierownik przekazuje
     mu kontrolę nad finalizacją i wysyłką e-maila.
-    
+
     Returns:
         Agent zarządzający e-mailami
     """
@@ -429,20 +429,18 @@ def create_email_manager_agent() -> Agent:
     )
 
 
-def create_sales_manager_with_handoff(
-    sales_tools: list, email_manager: Agent
-) -> Agent:
+def create_sales_manager_with_handoff(sales_tools: list, email_manager: Agent) -> Agent:
     """
     Tworzy agenta kierownika sprzedaży z możliwością przekazania kontroli (handoff).
-    
+
     Różnica między Tools a Handoffs:
     - Tools: Agent wywołuje narzędzie, otrzymuje wynik, kontynuuje pracę
     - Handoffs: Agent przekazuje całe zadanie innemu agentowi, kontrola nie wraca
-    
+
     Args:
         sales_tools: Lista narzędzi do generowania e-maili
         email_manager: Agent zarządzający formatowaniem i wysyłką
-    
+
     Returns:
         Agent kierownika z możliwością handoff
     """
@@ -574,7 +572,7 @@ async def demo_sales_manager_with_handoff() -> None:
 async def main() -> None:
     """
     Główna funkcja uruchamiająca wszystkie demonstracje.
-    
+
     Uwaga: Przed uruchomieniem upewnij się, że:
     1. Masz skonfigurowany plik .env z SENDGRID_API_KEY
     2. Masz zweryfikowany adres e-mail w SendGrid
